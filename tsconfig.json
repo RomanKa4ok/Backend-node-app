@@ -1,0 +1,47 @@
+{
+  "ts-node": {
+    "require": [
+      "tsconfig-paths/register"
+    ]
+  },
+  "compilerOptions": {
+    "rootDir": "./",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "baseUrl": "..",
+    "allowJs": true,
+    "outDir": "dist",
+    "sourceMap": false,
+    "checkJs": false,
+    "alwaysStrict": true,
+    "diagnostics": true,
+    "importHelpers": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitOverride": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noImplicitReturns": true,
+    "strictFunctionTypes": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "typeRoots": [
+      "node_modules/@types",
+      "./**/*"
+    ],
+    "paths": {
+      "src/*": [
+        "src/*"
+      ]
+    }
+  },
+  "include": [
+    "Backend-node-app/src/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

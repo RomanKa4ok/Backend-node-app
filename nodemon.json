@@ -1,0 +1,8 @@
+{
+  "watch": [
+    "src", "index.ts"
+  ],
+  "ext": "ts,d.ts,json,js",
+  "ignore": [],
+  "exec": "node --inspect --no-warnings --require ts-node/register"
+}
