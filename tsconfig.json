@@ -8,7 +8,7 @@
     "rootDir": "./",
     "module": "CommonJS",
     "moduleResolution": "Node",
-    "baseUrl": "..",
+    "baseUrl": ".",
     "allowJs": true,
     "outDir": "dist",
     "sourceMap": false,
@@ -33,13 +33,11 @@
       "./**/*"
     ],
     "paths": {
-      "src/*": [
-        "src/*"
-      ]
+      "src/*": ["./src/*"]
     }
   },
   "include": [
-    "Backend-node-app/src/**/*"
+    "src/**/*"
   ],
   "exclude": [
     "node_modules"

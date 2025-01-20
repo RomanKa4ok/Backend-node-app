@@ -3,10 +3,9 @@
     "parserOptions": {
         "ecmaVersion": 2022,
         "sourceType": "module",
-        "project": [
-            "./tsconfig.json"
-        ]
+        "project": ["./tsconfig.json"]
     },
+
     "env": {
         "es6": true,
         "browser": true,
@@ -33,36 +32,18 @@
         "no-return-assign": 0,
         "arrow-body-style": 0,
         "no-continue": 0,
-        "radix": [
-            "error",
-            "as-needed"
-        ],
+        "radix": ["error", "as-needed"],
         "comma-dangle": 0,
         "no-console": "warn",
-        "max-lines-per-function": [
-            1,
-            {
-                "max": 25,
-                "skipBlankLines": true
-            }
-        ],
-        "complexity": [
-            "error",
-            10
-        ],
+        "max-lines-per-function": [1, {"max": 25, "skipBlankLines": true}],
+        "complexity": ["error", 10],
         "consistent-return": 0,
         "no-param-reassign": 0,
         "linebreak-style": 0,
         "no-underscore-dangle": 0,
         "object-curly-newline": 0,
         "arrow-parens": 0,
-        "max-lines": [
-            "warn",
-            {
-                "max": 315,
-                "skipBlankLines": true
-            }
-        ],
+        "max-lines": ["warn", {"max": 315, "skipBlankLines": true}],
         "max-len": [
             1,
             {
@@ -73,17 +54,8 @@
                 "ignoreTemplateLiterals": true
             }
         ],
-        "max-depth": [
-            "error",
-            3
-        ],
-        "quotes": [
-            "error",
-            "single",
-            {
-                "allowTemplateLiterals": true
-            }
-        ],
+        "max-depth": ["error", 3],
+        "quotes": ["error", "single", { "allowTemplateLiterals": true }],
         "function-paren-newline": "warn",
         "function-call-argument-newline": "warn",
         "import/extensions": [
@@ -104,62 +76,41 @@
             "warn",
             {
                 "selector": "default",
-                "format": [
-                    "camelCase"
-                ]
+                "format": ["camelCase"]
             },
+
             {
                 "selector": "variable",
-                "format": [
-                    "camelCase",
-                    "UPPER_CASE"
-                ],
+                "format": ["camelCase", "UPPER_CASE"],
                 "leadingUnderscore": "allow"
             },
             {
                 "selector": "parameter",
-                "format": [
-                    "camelCase",
-                    "snake_case"
-                ],
+                "format": ["camelCase", "snake_case"],
                 "leadingUnderscore": "allow"
             },
+
             {
                 "selector": "memberLike",
-                "modifiers": [
-                    "private"
-                ],
-                "format": [
-                    "camelCase"
-                ],
+                "modifiers": ["private"],
+                "format": ["camelCase"],
                 "leadingUnderscore": "require"
             },
             {
                 "selector": "typeLike",
-                "format": [
-                    "PascalCase"
-                ]
+                "format": ["PascalCase"]
             },
             {
                 "selector": "classMethod",
-                "format": [
-                    "camelCase"
-                ],
+                "format": ["camelCase"],
                 "leadingUnderscore": "allow"
             }
         ],
         "no-return-await": "off",
-        "@typescript-eslint/return-await": [
-            "warn",
-            "always"
-        ],
-        "@typescript-eslint/no-useless-constructor": [
-            "warn"
-        ],
+        "@typescript-eslint/return-await": ["warn", "always"],
+        "@typescript-eslint/no-useless-constructor": ["warn"],
         "no-shadow": "off",
-        "@typescript-eslint/no-shadow": [
-            "error"
-        ],
+        "@typescript-eslint/no-shadow": ["error"],
         "@typescript-eslint/consistent-type-imports": "error",
         "newline-before-return": "error",
         "no-restricted-syntax": [
@@ -167,15 +118,7 @@
             "FunctionDeclaration[params.length>3]"
         ],
         "indent": "off",
-        "@typescript-eslint/array-type": [
-            "error",
-            {
-                "default": "array"
-            }
-        ]
+        "@typescript-eslint/array-type": ["error", { "default": "array" }],
     },
-    "ignorePatterns": [
-        "*.js",
-        "node_modules/"
-    ]
+    "ignorePatterns": ["*.js", "node_modules/"]
 }
