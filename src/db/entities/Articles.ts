@@ -1,23 +1,14 @@
-import {Column, CreateDateColumn, Entity, PrimaryColumn, UpdateDateColumn} from "typeorm";
-import {EntityStatus} from "src/common/constants";
+import { Column, Entity } from 'typeorm';
+import EntityBase from 'src/common/classes/entity-base';
 
-@Entity('articles', {schema: 'public'})
-export default class Articles {
-    @PrimaryColumn('uuid')
-    id: string;
-
+@Entity(
+    'articles',
+    { schema: 'public' }
+)
+export default class Articles extends EntityBase {
     @Column('varchar')
     title: string;
 
     @Column('text')
     content: string;
-
-    @Column({ type: 'enum', name: 'entity_status', default: EntityStatus.Draft, enum: EntityStatus })
-    entityStatus: EntityStatus;
-
-    @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', name: 'created_at' })
-    createdAt: Date;
-
-    @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', name: 'updated_at' })
-    updatedAt: Date;
-}
+} 

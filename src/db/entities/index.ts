@@ -1,4 +1,4 @@
-import Articles from "src/db/entities/Articles";
+import Articles from 'src/db/entities/Articles'; 
 
 const entities = [
     Articles
