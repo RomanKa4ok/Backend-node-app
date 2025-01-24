@@ -1,17 +1,35 @@
-import { Router } from 'express';
-import ArticlesRepository from '../repositories/articles.repository';
-const articlesRepository = new ArticlesRepository();
+import type { Application, Router } from 'express';
+import EntityController from 'src/common/classes/entity-controller';
+import type { Articles } from 'src/db';
+import ArticlesService from 'src/plugins/articles/services/articles.service';
+import { injectable } from 'tsyringe';
 
-const articlesRouter = Router();
+@injectable()
+export default class ArticlesApiController extends EntityController<Articles> {
+    protected override basePath: string = '/articles'
 
-articlesRouter.get(
-'/',
-async (req, res) => {
-    const article = await articlesRepository.findOneByOrFail({
-        id: '8862239e-d50b-4a91-9f8a-31e997298811'
-    })
-    res.json(article);
+    constructor(service: ArticlesService) {
+        super(service);
+    }
+
+    override register(app: Application | Router): void {
+        this.router.get(
+            '/:id',
+            this.apiMethod(this.getOne)
+        );
+        this.router.post(
+            '/:id',
+            this.apiMethod(this.createOne)
+        );
+        this.router.put(
+            '/:id',
+            this.apiMethod(this.updateOne)
+        );
+        this.router.delete(
+            '/:id',
+            this.apiMethod(this.deleteOne)
+        );
+
+        super.register(app);
+    }
 }
-)
-
-export default articlesRouter;  

@@ -20,7 +20,11 @@ export default abstract class RepositoryBase<Entity extends ObjectLiteral> {
     }
 
     async createOne(data: Partial<Entity>): Promise<Entity> {
-        const { generatedMaps } = await this.getRepository().insert(data);
+        const { generatedMaps } = await this.getQueryBuilder()
+            .insert()
+            .values(data)
+            .returning('*')
+            .execute();
 
         return generatedMaps[0] as Entity;
     }
@@ -32,5 +36,9 @@ export default abstract class RepositoryBase<Entity extends ObjectLiteral> {
 
     protected getRepository(): Repository<Entity> {
         return pgdb.getRepository(this.model);
+    }
+
+    protected getQueryBuilder() {
+        return this.getRepository().createQueryBuilder(this.alias);
     }
 }

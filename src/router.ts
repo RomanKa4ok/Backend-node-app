@@ -1,11 +1,19 @@
+import type { Application } from 'express';
 import { Router } from 'express';
-import articlesRouter from './plugins/articles/api/articles.router';
+import ArticlesApiController from './plugins/articles/api/articles.router';
+import { injectable } from 'tsyringe';
 
-const router = Router();
+@injectable()
+export default class ServerRouter{
+    private _router: Router;
 
-router.use(
-'/articles',
-articlesRouter
-);
+    constructor(private readonly _articlesApiController: ArticlesApiController) {
+        this._router = Router()
+    }
 
-export default router; 
+    register(app: Application) {
+        this._articlesApiController.register(this._router);
+
+        app.use('/api', this._router);
+    }
+}

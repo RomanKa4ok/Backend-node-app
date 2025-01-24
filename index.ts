@@ -1,4 +1,7 @@
-import Server from './src/server'
+import 'reflect-metadata';
 
-const server = new Server();
+import Server from './src/server'
+import {container} from "tsyringe";
+
+const server = container.resolve(Server);
 server.register();

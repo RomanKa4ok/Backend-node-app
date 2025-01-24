@@ -1,15 +1,18 @@
 import type { Express } from 'express';
 import * as express from 'express';
 import * as http from 'node:http';
-import router from './router';
+import * as bodyParser from 'body-parser';
 import helmet from 'helmet';
 import config from './config';
 import { createPGConnection } from 'src/db';
+import ServerRouter from './router';
+import { injectable } from 'tsyringe';
 
+@injectable()
 export default class Server {
     app: Express;
 
-    constructor() {
+    constructor(private readonly _serverRouter: ServerRouter) {
         this.app = express();
     }
 
@@ -17,11 +20,9 @@ export default class Server {
         const port = config.PORT;
 
         this.app.use(helmet())
+        this.app.use(bodyParser.json())
 
-        this.app.use(
-            '/api',
-            router
-        );
+        this._serverRouter.register(this.app)
 
         await createPGConnection();
 
