@@ -3,3 +3,10 @@ export enum EntityStatus {
     Active = 'active',
     Deleted = 'deleted',
 }
+
+export enum Environment {
+    Local = 'local',
+    Development = 'development',
+    Production = 'production',
+    Test = 'test',
+}

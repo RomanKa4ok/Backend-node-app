@@ -3,13 +3,17 @@ import EntityController from 'src/common/classes/entity-controller';
 import type { Articles } from 'src/db';
 import ArticlesService from 'src/plugins/articles/services/articles.service';
 import { injectable } from 'tsyringe';
+import LoggerService from 'src/common/services/logger.service';
 
 @injectable()
 export default class ArticlesApiController extends EntityController<Articles> {
     protected override basePath: string = '/articles'
 
-    constructor(service: ArticlesService) {
-        super(service);
+    constructor(
+        service: ArticlesService,
+        logger: LoggerService,
+    ) {
+        super(service, logger);
     }
 
     override register(app: Application | Router): void {

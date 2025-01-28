@@ -4,17 +4,23 @@ import type EntityBase from 'src/common/classes/entity-base';
 import type EntityService from 'src/common/classes/entity-service';
 import type { CreateOneRequest, DeleteOneRequest, GetOneRequest, UpdateOneRequest } from 'src/common/types/api.types';
 import type { TAny } from 'src/common/types';
+import type LoggerService from 'src/common/services/logger.service';
 
 export default abstract class EntityController<Entity extends EntityBase> extends ApiController {
 
-    constructor(protected service: EntityService<Entity>) {
-        super();
+    constructor(
+        protected service: EntityService<Entity>,
+        override logger: LoggerService
+    ) {
+        super(logger);
     }
 
     protected async getOne(request: GetOneRequest): Promise<SuccessResponse<Entity>> {
         const entity = await this.service.findOneBy({
             id: request.params.id
         } as Partial<Entity>);
+
+        throw new Error('method not implemented');
 
         return this.toSuccessResponse(
             entity,

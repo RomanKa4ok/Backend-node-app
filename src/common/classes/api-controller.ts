@@ -2,6 +2,9 @@ import { Router } from 'express';
 import type { Application, Response, Request } from 'express';
 import type { ApiRequest, ResponseStatus } from 'src/common/types/api.types';
 import type { TAny } from 'src/common/types';
+import type LoggerService from 'src/common/services/logger.service';
+
+import 'src/common/services/logger.service'
 
 export type SuccessResponse<T extends (object | object[]) = object> = {
     data: T,
@@ -22,9 +25,11 @@ type Method<T extends SuccessResponse | never = SuccessResponse> = (
 export default abstract class ApiController {
     protected abstract basePath: string;
     protected router: Router;
+    protected logger: LoggerService;
 
-    constructor() {
+    constructor(logger: LoggerService) {
         this.router = Router();
+        this.logger = logger.createChild(this.constructor.name);
     }
 
     register(app: Application | Router) {
@@ -42,7 +47,7 @@ export default abstract class ApiController {
 
                 res.status(200).json(result);
             } catch (error) {
-                console.error(error);
+                this.logger.error(error.message, error);
 
                 res.status(500).json({
                     status: 'error',
