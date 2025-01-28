@@ -6,7 +6,7 @@ import RepositoryBase from './repository';
 export default abstract class RepositoryEntity<Entity extends EntityBase> extends RepositoryBase<Entity> {
     override createOne(data: Partial<Entity>) {
         return super.createOne({
-            id: randomUUID,
+            id: randomUUID(),
             entityStatus: EntityStatus.Draft,
             createdAt: new Date(),
             updatedAt: new Date(),

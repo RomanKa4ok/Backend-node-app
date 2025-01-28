@@ -1,8 +1,8 @@
-import { Column, CreateDateColumn, PrimaryColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'; 
 import { EntityStatus } from '../constants';
 
 export default abstract class EntityBase {
-    @PrimaryColumn('uuid')
+    @PrimaryGeneratedColumn('uuid')
     id: string;
 
     @Column({ type: 'enum', name: 'entity_status', default: EntityStatus.Active, enum: EntityStatus })

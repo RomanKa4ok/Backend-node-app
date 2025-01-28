@@ -11,6 +11,7 @@ export const pgdb = new DataSource({
     url: DATABASE_URL,
     entities,
     synchronize: false,
+    logging: true,
 });
 
 export const createPGConnection = async () => {

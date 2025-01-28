@@ -18,7 +18,7 @@ export default class ArticlesApiController extends EntityController<Articles> {
             this.apiMethod(this.getOne)
         );
         this.router.post(
-            '/:id',
+            '/',
             this.apiMethod(this.createOne)
         );
         this.router.put(
