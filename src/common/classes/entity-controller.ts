@@ -5,6 +5,7 @@ import type EntityService from 'src/common/classes/entity-service';
 import type { CreateOneRequest, DeleteOneRequest, GetOneRequest, UpdateOneRequest } from 'src/common/types/api.types';
 import type { TAny } from 'src/common/types';
 import type LoggerService from 'src/common/services/logger.service';
+import { ApiError } from 'src/common/classes/errors';
 
 export default abstract class EntityController<Entity extends EntityBase> extends ApiController {
 
@@ -19,8 +20,6 @@ export default abstract class EntityController<Entity extends EntityBase> extend
         const entity = await this.service.findOneBy({
             id: request.params.id
         } as Partial<Entity>);
-
-        throw new Error('method not implemented');
 
         return this.toSuccessResponse(
             entity,

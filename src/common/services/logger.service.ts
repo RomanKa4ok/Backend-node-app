@@ -25,6 +25,6 @@ export default class LoggerService {
     }
 
     createChild(module: string): LoggerService {
-        return new LoggerService(this._logger.child(module));
+        return new LoggerService(this._logger.child({ module }));
     }
 }

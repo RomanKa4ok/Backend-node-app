@@ -5,6 +5,9 @@ import type { TAny } from 'src/common/types';
 import type LoggerService from 'src/common/services/logger.service';
 
 import 'src/common/services/logger.service'
+import { ErrorStatusCode } from 'src/common/constants';
+import { ApiError, NotFoundError } from 'src/common/classes/errors';
+import { EntityNotFoundError } from 'typeorm';
 
 export type SuccessResponse<T extends (object | object[]) = object> = {
     data: T,
@@ -15,6 +18,7 @@ type ErrorResponse = {
     status: ResponseStatus,
     message: string;
     statusCode: string;
+    apiStatusCode: number;
 }
 
 type Method<T extends SuccessResponse | never = SuccessResponse> = (
@@ -49,14 +53,48 @@ export default abstract class ApiController {
             } catch (error) {
                 this.logger.error(error.message, error);
 
-                res.status(500).json({
-                    status: 'error',
-                    message: 'Internal Server Error',
-                    statusCode: 'INTERNAL_SERVER_ERROR',
-                } as ErrorResponse);
+                const { apiStatusCode, ...rest } = this.toErrorResponse(error);
+
+                res.status(apiStatusCode).json(rest);
             }
 
             return this.router;
+        }
+    }
+
+    protected toErrorResponse(error: unknown): ErrorResponse {
+        if (!(error instanceof Error)) {
+            return {
+                status: 'error',
+                message: 'Internal Server Error',
+                statusCode: ErrorStatusCode.InternalServerError,
+                apiStatusCode: 500
+            }
+        }
+
+        let message = 'Internal Server Error';
+        let statusCode = ErrorStatusCode.InternalServerError;
+        let apiStatusCode = 500;
+
+        switch (error.constructor) {
+            case ApiError:
+                message = error.message;
+                statusCode = ErrorStatusCode.ApiError;
+                apiStatusCode = 400;
+                break;
+            case EntityNotFoundError:
+            case NotFoundError:
+                message = 'Entity not found';
+                statusCode = ErrorStatusCode.NotFound;
+                apiStatusCode = 404;
+                break;
+        }
+
+        return {
+            status: 'error',
+            message,
+            statusCode,
+            apiStatusCode
         }
     }
 
