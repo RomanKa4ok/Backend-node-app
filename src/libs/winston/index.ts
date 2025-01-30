@@ -2,6 +2,7 @@ import { createLogger, format, Logger, transports } from 'winston';
 import config from 'src/config';
 import { Environment } from 'src/common/constants';
 import { container } from 'tsyringe';
+import MongoTransport from 'src/libs/transports/mongo.transport';
 
 const { NODE_ENV } = config
 
@@ -17,7 +18,9 @@ export const consoleTransport = new transports.Console({
     format: format.combine(format.colorize(), format.timestamp(), format.json(), printFormat)
 })
 
-const logger = createLogger({});
+const logger = createLogger({
+    transports: [new MongoTransport()]
+});
 
 if (NODE_ENV !== Environment.Production) {
     logger.add(consoleTransport)

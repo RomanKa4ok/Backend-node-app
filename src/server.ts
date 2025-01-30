@@ -7,12 +7,18 @@ import config from './config';
 import { createPGConnection } from 'src/db';
 import ServerRouter from './router';
 import { injectable } from 'tsyringe';
+import MongoConnection from 'src/db/mongo';
+import LoggerService from 'src/common/services/logger.service';
 
 @injectable()
 export default class Server {
     app: Express;
 
-    constructor(private readonly _serverRouter: ServerRouter) {
+    constructor(
+        private readonly _serverRouter: ServerRouter,
+        private readonly _mongoConnection: MongoConnection,
+        private readonly _logger: LoggerService,
+    ) {
         this.app = express();
     }
 
@@ -24,13 +30,16 @@ export default class Server {
 
         this._serverRouter.register(this.app)
 
-        await createPGConnection();
+        await Promise.all([
+            createPGConnection(),
+            this._mongoConnection.createMongoConnection()
+        ])
 
         return await new Promise<void>((resolve) => {
             http.createServer(this.app).listen(
                 (port),
                 () => {
-                    console.log(`Server listening on port ${port}! Open http://localhost:${port} to see the app`);
+                    this._logger.info(`Server listening on port ${port}! Open http://localhost:${port} to see the app`);
                     resolve();
                 }
             );
