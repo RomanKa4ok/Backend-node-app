@@ -7,7 +7,6 @@ import type { TAny } from 'src/common/types';
 import type LoggerService from 'src/common/services/logger.service';
 
 export default abstract class EntityController<Entity extends EntityBase> extends ApiController {
-
     constructor(
         protected service: EntityService<Entity>,
         override logger: LoggerService
