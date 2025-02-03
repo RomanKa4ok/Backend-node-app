@@ -2,8 +2,14 @@ import type { SuccessResponse } from 'src/common/classes/api-controller';
 import ApiController from 'src/common/classes/api-controller';
 import type EntityBase from 'src/common/classes/entity-base';
 import type EntityService from 'src/common/classes/entity-service';
-import type { CreateOneRequest, DeleteOneRequest, GetOneRequest, UpdateOneRequest } from 'src/common/types/api.types';
-import type { TAny } from 'src/common/types';
+import type {
+    CreateOneRequest,
+    DeleteOneRequest,
+    GetListPagedRequest,
+    GetOneRequest,
+    UpdateOneRequest
+} from 'src/common/types/api.types';
+import type { GetListPagedReturn, TAny } from 'src/common/types';
 import type LoggerService from 'src/common/services/logger.service';
 
 export default abstract class EntityController<Entity extends EntityBase> extends ApiController {
@@ -23,6 +29,14 @@ export default abstract class EntityController<Entity extends EntityBase> extend
             entity,
             'Entity found'
         );
+    }
+
+    protected async getListPaged(request: GetListPagedRequest):
+        Promise<SuccessResponse<GetListPagedReturn<Entity>>>
+    {
+        const result = await this.service.getListPaged(request.query);
+
+        return this.toSuccessResponse(result, 'Entities List Fetched')
     }
 
     protected async createOne(request: CreateOneRequest<Partial<Entity>>): Promise<SuccessResponse<Entity>>{

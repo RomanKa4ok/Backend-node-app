@@ -11,4 +11,7 @@ export default class Articles extends EntityBase {
 
     @Column('text')
     content: string;
-} 
+
+    @Column('uuid', { name: 'created_by_id' })
+    createdById: string
+}

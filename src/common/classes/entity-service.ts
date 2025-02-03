@@ -1,5 +1,6 @@
 import type EntityBase from './entity-base';
 import type RepositoryEntity from './entity-repository';
+import type { GetListPagedQuery, GetListPagedReturn } from 'src/common/types';
 
 export default abstract class EntityService<Entity extends EntityBase> {
     protected repository: RepositoryEntity<Entity>;
@@ -10,6 +11,10 @@ export default abstract class EntityService<Entity extends EntityBase> {
 
     async findOneBy(where: Partial<Entity>): Promise<Entity> {
         return await this.repository.findOneByOrFail(where);
+    }
+
+    async getListPaged(query: GetListPagedQuery): Promise<GetListPagedReturn<Entity>> {
+        return await this.repository.getListPaged(query);
     }
 
     async createOne(data: Partial<Entity>): Promise<Entity> {

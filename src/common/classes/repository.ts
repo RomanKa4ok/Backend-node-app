@@ -1,5 +1,6 @@
 import { pgdb } from 'src/db/typeorm';
 import type { EntityTarget, ObjectLiteral, Repository } from 'typeorm';
+import type { GetListPagedQuery, GetListPagedQueryBuilderQuery, GetListPagedReturn } from 'src/common/types';
 
 export default abstract class RepositoryBase<Entity extends ObjectLiteral> {
     abstract model: EntityTarget<Entity>;
@@ -11,6 +12,16 @@ export default abstract class RepositoryBase<Entity extends ObjectLiteral> {
 
     async findOneByOrFail(where: Partial<Entity>): Promise<Entity> {
         return await this.getRepository().findOneByOrFail(where);
+    }
+
+    async getListPaged(query: GetListPagedQuery): Promise<GetListPagedReturn<Entity>> {
+        const { page = 1, pageSize = 1000 } = query;
+
+        const qb = this.getListPagedQueryBuilder({ page, pageSize });
+
+        const [result, total] = await qb.getManyAndCount();
+
+        return this.toListPagedResponse(result, page, pageSize, total);
     }
 
     async updateOneBy(where: Partial<Entity>, data: Partial<Entity>): Promise<Entity> {
@@ -40,5 +51,28 @@ export default abstract class RepositoryBase<Entity extends ObjectLiteral> {
 
     protected getQueryBuilder() {
         return this.getRepository().createQueryBuilder(this.alias);
+    }
+
+    protected getListPagedQueryBuilder(query: GetListPagedQueryBuilderQuery) {
+        const { page, pageSize, sortBy, sortDirection } = query;
+
+        const qb =  this.getQueryBuilder()
+            .skip((page - 1) * pageSize)
+            .take(pageSize);
+
+        if (sortBy) {
+            qb.orderBy(sortBy, sortDirection);
+        }
+
+        return qb;
+    }
+
+    protected toListPagedResponse(result: Entity[], total: number, page: number, pageSize: number) {
+        return {
+            result,
+            total,
+            page,
+            pageSize
+        }
     }
 }
