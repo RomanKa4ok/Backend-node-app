@@ -13,6 +13,7 @@ export enum Environment {
 
 export enum ErrorStatusCode {
     InternalServerError = 'INTERNAL_SERVER_ERROR',
+    ValidationError = 'VALIDATION_ERROR',
     ApiError = 'API_ERROR',
     NotFound = 'NOT_FOUND',
 }

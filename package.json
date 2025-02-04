@@ -34,6 +34,7 @@
   },
   "dependencies": {
     "body-parser": "^1.20.3",
+    "class-validator": "^0.14.1",
     "cors": "^2.8.5",
     "db-migrate": "^0.11.14",
     "db-migrate-pg": "^1.5.2",

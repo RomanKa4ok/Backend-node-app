@@ -1,5 +1,6 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import EntityBase from 'src/common/classes/entity-base';
+import { Users } from 'src/db';
 
 @Entity(
     'articles',
@@ -13,5 +14,9 @@ export default class Articles extends EntityBase {
     content: string;
 
     @Column('uuid', { name: 'created_by_id' })
-    createdById: string
+    createdById: string;
+
+    @ManyToOne(() => Users, { nullable: true, onDelete: 'SET NULL' })
+    @JoinColumn({ name: 'created_by_id' })
+    createdBy: Users | null;
 }

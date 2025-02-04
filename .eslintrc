@@ -100,54 +100,6 @@
         "import/no-extraneous-dependencies": 1,
         "import/prefer-default-export": 1,
         "camelcase": "off",
-        "@typescript-eslint/naming-convention": [
-            "warn",
-            {
-                "selector": "default",
-                "format": [
-                    "camelCase"
-                ]
-            },
-            {
-                "selector": "variable",
-                "format": [
-                    "camelCase",
-                    "UPPER_CASE"
-                ],
-                "leadingUnderscore": "allow"
-            },
-            {
-                "selector": "parameter",
-                "format": [
-                    "camelCase",
-                    "snake_case"
-                ],
-                "leadingUnderscore": "allow"
-            },
-            {
-                "selector": "memberLike",
-                "modifiers": [
-                    "private"
-                ],
-                "format": [
-                    "camelCase"
-                ],
-                "leadingUnderscore": "require"
-            },
-            {
-                "selector": "typeLike",
-                "format": [
-                    "PascalCase"
-                ]
-            },
-            {
-                "selector": "classMethod",
-                "format": [
-                    "camelCase"
-                ],
-                "leadingUnderscore": "allow"
-            }
-        ],
         "no-return-await": "off",
         "@typescript-eslint/return-await": [
             "warn",

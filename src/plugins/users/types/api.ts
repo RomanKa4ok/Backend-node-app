@@ -1,4 +1,5 @@
 import type { CreateOneRequest } from 'src/common/types/api.types';
+import type { CreateUserSchema } from 'src/plugins/users/schemas';
 
 export type CreateUserRequestBody = {
     firstName: string;
@@ -7,4 +8,4 @@ export type CreateUserRequestBody = {
     password: string;
 }
 
-export type CreateUserRequest = CreateOneRequest<CreateUserRequestBody>
+export type CreateUserRequest = CreateOneRequest<CreateUserSchema>
