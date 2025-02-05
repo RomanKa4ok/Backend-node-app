@@ -1,0 +1,11 @@
+import type { ApiRequest } from 'src/common/types/api.types';
+import type { EmptyObject } from 'src/common/types';
+
+export type SignUpUserRequestBody = {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+}
+
+export type SignUpUserRequest = ApiRequest<EmptyObject, SignUpUserRequestBody>
