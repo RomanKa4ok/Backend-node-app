@@ -3,7 +3,6 @@ import type { Users } from 'src/db';
 import UsersApiService from 'src/plugins/users/services/users.service';
 import LoggerService from 'src/common/services/logger.service';
 import { injectable } from 'tsyringe';
-import type { Application, Router } from 'express';
 import { CreateUserRequest } from 'src/plugins/users/types/api';
 import { SuccessResponse } from 'src/common/classes/api-controller';
 import MiddlewaresService from 'src/common/services/middlewares.service';
@@ -12,8 +11,6 @@ import { IdSchema } from 'src/common/schemas';
 
 @injectable()
 export default class UsersController extends EntityController<Users> {
-    protected override basePath: string = '/users';
-
     constructor(
         _service: UsersApiService,
         _logger: LoggerService,
@@ -22,29 +19,29 @@ export default class UsersController extends EntityController<Users> {
         super(_service, _logger);
     }
 
-    override register(app: Application | Router): void {
-        this.router.get(
+    override register() {
+        this.get(
             '/:id',
-            this.middleware(this._middlewares.validateParams(IdSchema)),
-            this.apiMethod(this.getOne)
+            this._middlewares.validateParams(IdSchema),
+            this.getOne
         );
-        this.router.post(
+        this.post(
             '/',
-            this.middleware(this._middlewares.validateBody(CreateUserSchema)),
-            this.apiMethod(this.createOne)
+            this._middlewares.validateBody(CreateUserSchema),
+            this.createOne
         );
-        this.router.put(
+        this.put(
             '/:id',
-            this.middleware(this._middlewares.validateParams(IdSchema)),
-            this.apiMethod(this.updateOne)
+            this._middlewares.validateParams(IdSchema),
+            this.updateOne
         );
-        this.router.delete(
+        this.delete(
             '/:id',
-            this.middleware(this._middlewares.validateParams(IdSchema)),
-            this.apiMethod(this.deleteOne)
+            this._middlewares.validateParams(IdSchema),
+            this.deleteOne
         );
 
-        super.register(app);
+        return super.register();
     }
 
     protected override async createOne(request: CreateUserRequest): Promise<SuccessResponse<Users>> {

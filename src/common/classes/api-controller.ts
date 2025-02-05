@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import type { Application, Response, Request , NextFunction } from 'express';
+import type { Response, Request, NextFunction } from 'express';
 import type { ApiRequest, ResponseStatus } from 'src/common/types/api.types';
 import type { TAny } from 'src/common/types';
 import type LoggerService from 'src/common/services/logger.service';
@@ -34,7 +34,6 @@ type MiddlewareMethod = (
 ) => Promise<void>
 
 export default abstract class ApiController {
-    protected abstract basePath: string;
     protected router: Router;
     protected logger: LoggerService;
 
@@ -43,8 +42,8 @@ export default abstract class ApiController {
         this.logger = logger.createChild(this.constructor.name);
     }
 
-    register(app: Application | Router) {
-        app.use(this.basePath, this.router as TAny);
+    register() {
+        return this.router;
     }
 
     protected middleware(method: MiddlewareMethod) {
@@ -134,5 +133,55 @@ export default abstract class ApiController {
             status: 'success',
             message,
         }
+    }
+
+    protected get(path: string, ...rest: (MiddlewareMethod | Method)[]) {
+        const { method, middlewares } = this.parseMethods(rest);
+
+        this.router.get(
+            path,
+            ...middlewares,
+            method,
+        );
+    }
+
+    protected post(path: string, ...rest: (MiddlewareMethod | Method)[]) {
+        const { method, middlewares } = this.parseMethods(rest);
+
+        this.router.post(
+            path,
+            ...middlewares,
+            method,
+        );
+    }
+
+    protected put(path: string, ...rest: (MiddlewareMethod | Method)[]) {
+        const { method, middlewares } = this.parseMethods(rest);
+
+        this.router.put(
+            path,
+            ...middlewares,
+            method,
+        );
+    }
+
+    protected delete(path: string, ...rest: (MiddlewareMethod | Method)[]) {
+        const { method, middlewares } = this.parseMethods(rest);
+
+        this.router.delete(
+            path,
+            ...middlewares,
+            method,
+        );
+    }
+
+    private parseMethods(rest: (MiddlewareMethod | Method)[]) {
+        const middlewares = rest.slice(0, -1).map((fn) => this.middleware(fn as MiddlewareMethod));
+        const method = this.apiMethod(rest.at(-1)?.bind(this) as Method);
+
+        return {
+            middlewares,
+            method,
+        };
     }
 }

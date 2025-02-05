@@ -61,7 +61,7 @@ export default abstract class RepositoryBase<Entity extends ObjectLiteral> {
             .take(pageSize);
 
         if (sortBy) {
-            qb.orderBy(sortBy, sortDirection);
+            qb.orderBy(`${this.alias}.${sortBy}`, sortDirection);
         }
 
         return qb;

@@ -1,4 +1,3 @@
-import type { Application, Router } from 'express';
 import EntityController from 'src/common/classes/entity-controller';
 import type { Articles } from 'src/db';
 import ArticlesService from 'src/plugins/articles/services/articles.service';
@@ -12,7 +11,6 @@ import ArticlesListQuerySchema from 'src/plugins/articles/schemas/articles-list-
 
 @injectable()
 export default class ArticlesApiController extends EntityController<Articles> {
-    protected override basePath: string = '/articles'
     declare service: ArticlesService;
 
     constructor(
@@ -23,30 +21,30 @@ export default class ArticlesApiController extends EntityController<Articles> {
         super(service, logger);
     }
 
-    override register(app: Application | Router): void {
-        this.router.get(
+    override register() {
+        this.get(
             '/:id',
-            this.apiMethod(this.getOne)
+            this.getOne
         );
-        this.router.get(
+        this.get(
             '/',
-            this.middleware(this._middlewares.validateQuery(ArticlesListQuerySchema)),
-            this.apiMethod(this.getListPaged)
+            this._middlewares.validateQuery(ArticlesListQuerySchema),
+            this.getListPaged
         );
-        this.router.post(
+        this.post(
             '/',
-            this.apiMethod(this.createOne)
+            this.createOne
         );
-        this.router.put(
+        this.put(
             '/:id',
-            this.apiMethod(this.updateOne)
+            this.updateOne
         );
-        this.router.delete(
+        this.delete(
             '/:id',
-            this.apiMethod(this.deleteOne)
+            this.deleteOne
         );
 
-        super.register(app);
+        return super.register()
     }
 
     override async createOne(request: CreateOneArticlesRequest): Promise<SuccessResponse<Articles>> {

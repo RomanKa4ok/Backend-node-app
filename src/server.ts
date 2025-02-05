@@ -28,7 +28,7 @@ export default class Server {
         this.app.use(helmet())
         this.app.use(bodyParser.json())
 
-        this._serverRouter.register(this.app)
+        this.app.use('/api', this._serverRouter.register())
 
         await Promise.all([
             createPGConnection(),
