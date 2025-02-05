@@ -15,4 +15,16 @@ export default class UsersRepository extends RepositoryEntity<Users> {
 
         return omit(user, ['password', 'salt'] as (keyof Users)[]) as Users;
     }
+
+    async getUserForSignIn(email: string) {
+        return await this.getRepository().findOne({
+            where: { email },
+            select: {
+                id: true,
+                email: true,
+                password: true,
+                salt: true,
+            }
+        })
+    }
 }

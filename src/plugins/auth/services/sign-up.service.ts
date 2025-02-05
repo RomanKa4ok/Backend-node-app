@@ -33,7 +33,7 @@ export default class SignUpService {
             salt,
             password: hashedPassword,
             role: UserRoles.USER,
-            email: EntityStatus.Active,
+            entityStatus: EntityStatus.Active,
         })
 
         this._logger.info(`${data.email}: Signed up successfully!`);

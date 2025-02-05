@@ -1,20 +1,23 @@
 import { injectable } from 'tsyringe';
 import ApiController from 'src/common/classes/api-controller';
-import SignUpService from 'src/plugins/auth/services/users.service';
-import { SignUpUserRequest } from 'src/plugins/auth/types/api';
+import SignUpService from 'src/plugins/auth/services/sign-up.service';
+import { SignInUserRequest, SignUpUserRequest } from 'src/plugins/auth/types/api';
 import LoggerService from 'src/common/services/logger.service';
+import SignInService from 'src/plugins/auth/services/sign-in.service';
 
 @injectable()
 export default class AuthController extends ApiController {
     constructor(
         logger: LoggerService,
-        private readonly _signUpService: SignUpService
+        private readonly _signUpService: SignUpService,
+        private readonly _signInService: SignInService
     ) {
         super(logger);
     }
 
     override register() {
         this.post('/sign-up', this.signUp)
+        this.post('/sign-in', this.signIn)
 
         return super.register();
     }
@@ -23,5 +26,11 @@ export default class AuthController extends ApiController {
         const user = await this._signUpService.signUp(req.body);
 
         return this.toSuccessResponse(user, 'User signed up successfully!')
+    }
+
+    protected async signIn(req: SignInUserRequest) {
+        await this._signInService.signIn(req.body);
+
+        return this.toSuccessResponse({}, 'User logged in to the system!');
     }
 }

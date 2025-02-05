@@ -1,3 +1,3 @@
-import CreateUserSchema from 'src/plugins/users/schemas/create-user.schema';
+import SignUpSchema from 'src/plugins/auth/schemas/sign-up.schema';
 
-export { CreateUserSchema };
+export { SignUpSchema };
