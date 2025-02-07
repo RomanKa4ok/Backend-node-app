@@ -29,8 +29,8 @@ export default class AuthController extends ApiController {
     }
 
     protected async signIn(req: SignInUserRequest) {
-        await this._signInService.signIn(req.body);
+        const data = await this._signInService.signIn(req.body);
 
-        return this.toSuccessResponse({}, 'User logged in to the system!');
+        return this.toSuccessResponse(data, 'User logged in to the system!');
     }
 }

@@ -3,6 +3,7 @@ import { injectable } from 'tsyringe';
 import LoggerService from 'src/common/services/logger.service';
 import { ApiError, NotFoundError } from 'src/common/classes/errors';
 import PasswordsService from 'src/plugins/users/services/passwords.service';
+import { JwtService } from 'src/common/services/jwt.service';
 
 export type SignInData = {
     email: string;
@@ -16,10 +17,12 @@ export default class SignInService {
     constructor(
         logger: LoggerService,
         private readonly _usersRepository: UsersRepository,
+        private readonly _JWTService: JwtService,
         private readonly _passwordService: PasswordsService,
-) {
+    ) {
         this._logger = logger.createChild('SignImService');
     }
+
     async signIn(data: SignInData) {
         this._logger.info(`Trying to log in: ${data.email}`);
 
@@ -37,6 +40,10 @@ export default class SignInService {
             throw new ApiError('User with provided email and password is invalid');
         }
 
-        return user;
+        this._logger.info(`Logged in successfully: ${data.email}`);
+
+        const token = this._JWTService.generateToken({ id: user.id }, '30Day')
+
+        return { token };
     }
 }

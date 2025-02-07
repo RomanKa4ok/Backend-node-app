@@ -2,6 +2,8 @@ import RepositoryEntity from 'src/common/classes/entity-repository';
 import { Users } from 'src/db';
 import { injectable } from 'tsyringe';
 import { omit } from 'lodash';
+import { AuthorizedUser } from 'src/plugins/auth/types';
+import { EntityStatus } from 'src/common/constants';
 
 @injectable()
 export default class UsersRepository extends RepositoryEntity<Users> {
@@ -14,6 +16,10 @@ export default class UsersRepository extends RepositoryEntity<Users> {
         });
 
         return omit(user, ['password', 'salt'] as (keyof Users)[]) as Users;
+    }
+
+    getAuthUser(id: string): Promise<AuthorizedUser> {
+        return this.getRepository().findOneBy({ id, entityStatus: EntityStatus.Active }) as Promise<AuthorizedUser>;
     }
 
     async getUserForSignIn(email: string) {

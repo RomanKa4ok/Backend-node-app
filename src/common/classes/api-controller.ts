@@ -27,8 +27,8 @@ type Method<T extends SuccessResponse | never = SuccessResponse> = (
     res: Response
 ) => Promise<T>
 
-type MiddlewareMethod = (
-    req: ApiRequest<TAny, TAny, TAny>,
+type MiddlewareMethod<T extends ApiRequest<TAny, TAny, TAny> = TAny> = (
+    req: T,
     res: Response,
     next: NextFunction,
 ) => Promise<void>

@@ -1,5 +1,13 @@
 import type { ValidationError } from 'class-validator';
 
+export class ServerError extends Error {
+    constructor(message: string) {
+        super(message);
+
+        Object.setPrototypeOf(this, ServerError.prototype);
+    }
+}
+
 export class ApiError extends Error {
     constructor(message: string) {
         super(message);
