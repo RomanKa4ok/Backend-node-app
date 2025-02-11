@@ -8,10 +8,11 @@
     "rootDir": "./",
     "module": "CommonJS",
     "moduleResolution": "Node",
+    "target": "ESNext",
     "baseUrl": ".",
     "allowJs": true,
     "outDir": "dist",
-    "sourceMap": false,
+    "sourceMap": true,
     "checkJs": false,
     "alwaysStrict": true,
     "diagnostics": true,
@@ -28,13 +29,11 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "resolveJsonModule": true,
-    "typeRoots": [
-      "node_modules/@types",
-      "./**/*"
-    ],
+    "typeRoots": ["node_modules/@types", "./**/*"],
     "paths": {
-      "src/*": ["./src/*"]
-    }
+      "src/*": ["src/*"]
+    },
+    "sourceRoot": "./"
   },
   "include": [
     "src/**/*"

@@ -2,7 +2,7 @@
   "name": "workshop",
   "version": "0.0.1",
   "description": "",
-  "main": "src/server.ts",
+  "main": "./index",
   "type": "commonjs",
   "scripts": {
     "start": "nodemon index.ts",
@@ -30,7 +30,7 @@
     "prettier": "^3.3.3",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.5.4"
+    "typescript": "^5.7.2"
   },
   "dependencies": {
     "@types/jsonwebtoken": "^9.0.8",
@@ -44,8 +44,10 @@
     "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
+    "mailgun.js": "^11.1.0",
     "mongoose": "^8.7.1",
     "pg": "^8.13.0",
+    "redis": "^4.7.0",
     "reflect-metadata": "^0.2.2",
     "tsyringe": "^4.8.0",
     "typeorm": "^0.3.20",

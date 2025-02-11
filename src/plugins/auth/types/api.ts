@@ -15,5 +15,11 @@ export type SignInUserRequestBody = {
     password: string;
 }
 
+export type ConfirmEmailRequestQuery = {
+    token: string;
+    email: string;
+}
+
 export type SignUpUserRequest = ApiRequest<EmptyObject, SignUpUserRequestBody>
 export type SignInUserRequest = ApiRequest<EmptyObject, SignInUserRequestBody>
+export type ConfirmEmailRequest = ApiRequest<EmptyObject, EmptyObject, ConfirmEmailRequestQuery>

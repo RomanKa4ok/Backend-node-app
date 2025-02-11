@@ -34,6 +34,12 @@ export default class SignInService {
             throw new NotFoundError('User does not exist');
         }
 
+        if (!user.emailConfirmedAt) {
+            this._logger.error(`User not confirmed: ${data.email}`);
+
+            throw new ApiError('User has to confirm email to be able to authorize');
+        }
+
         if (!this._passwordService.comparePassword(data.password, user.salt, user.password)) {
             this._logger.error(`Incorrect password for: ${data.email}`);
 

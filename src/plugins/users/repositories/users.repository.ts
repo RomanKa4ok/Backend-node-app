@@ -15,7 +15,7 @@ export default class UsersRepository extends RepositoryEntity<Users> {
             ...data,
         });
 
-        return omit(user, ['password', 'salt'] as (keyof Users)[]) as Users;
+        return omit(user, ['password', 'salt', 'emailConfirmedAt'] as (keyof Users)[]) as Users;
     }
 
     getAuthUser(id: string): Promise<AuthorizedUser> {
@@ -30,6 +30,7 @@ export default class UsersRepository extends RepositoryEntity<Users> {
                 email: true,
                 password: true,
                 salt: true,
+                emailConfirmedAt: true,
             }
         })
     }

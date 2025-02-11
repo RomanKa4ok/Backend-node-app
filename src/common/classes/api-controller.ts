@@ -22,16 +22,13 @@ type ErrorResponse = {
     apiStatusCode: number;
 }
 
-type Method<T extends SuccessResponse | never = SuccessResponse> = (
-    req: ApiRequest<TAny, TAny, TAny>,
-    res: Response
-) => Promise<T>
+export type MiddlewareMethod<T extends ApiRequest<TAny, TAny, TAny> = TAny> = (req: T, res: Response, next: NextFunction) => Promise<void>;
+type Method<
+    Req extends ApiRequest<TAny, TAny, TAny> = TAny,
+    T extends SuccessResponse | never = SuccessResponse,
+> = (req: Req, res: Response) => Promise<T>;
 
-type MiddlewareMethod<T extends ApiRequest<TAny, TAny, TAny> = TAny> = (
-    req: T,
-    res: Response,
-    next: NextFunction,
-) => Promise<void>
+type RestMethodType = [...MiddlewareMethod<TAny>[], Method<TAny, TAny>]
 
 export default abstract class ApiController {
     protected router: Router;
@@ -135,7 +132,7 @@ export default abstract class ApiController {
         }
     }
 
-    protected get(path: string, ...rest: (MiddlewareMethod | Method)[]) {
+    protected get(path: string, ...rest: RestMethodType) {
         const { method, middlewares } = this.parseMethods(rest);
 
         this.router.get(
@@ -145,7 +142,7 @@ export default abstract class ApiController {
         );
     }
 
-    protected post(path: string, ...rest: (MiddlewareMethod | Method)[]) {
+    protected post(path: string, ...rest: RestMethodType) {
         const { method, middlewares } = this.parseMethods(rest);
 
         this.router.post(
@@ -155,7 +152,7 @@ export default abstract class ApiController {
         );
     }
 
-    protected put(path: string, ...rest: (MiddlewareMethod | Method)[]) {
+    protected put(path: string, ...rest: RestMethodType) {
         const { method, middlewares } = this.parseMethods(rest);
 
         this.router.put(
@@ -165,7 +162,7 @@ export default abstract class ApiController {
         );
     }
 
-    protected delete(path: string, ...rest: (MiddlewareMethod | Method)[]) {
+    protected delete(path: string, ...rest: RestMethodType) {
         const { method, middlewares } = this.parseMethods(rest);
 
         this.router.delete(
@@ -175,7 +172,7 @@ export default abstract class ApiController {
         );
     }
 
-    private parseMethods(rest: (MiddlewareMethod | Method)[]) {
+    private parseMethods(rest: RestMethodType) {
         const middlewares = rest.slice(0, -1).map((fn) => this.middleware(fn as MiddlewareMethod));
         const method = this.apiMethod(rest.at(-1)?.bind(this) as Method);
 

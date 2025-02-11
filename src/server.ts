@@ -9,6 +9,7 @@ import ServerRouter from './router';
 import { injectable } from 'tsyringe';
 import MongoConnection from 'src/db/mongo';
 import LoggerService from 'src/common/services/logger.service';
+import AuthModule from 'src/plugins/auth/auth.module';
 
 @injectable()
 export default class Server {
@@ -17,6 +18,7 @@ export default class Server {
     constructor(
         private readonly _serverRouter: ServerRouter,
         private readonly _mongoConnection: MongoConnection,
+        private readonly _authModule: AuthModule,
         private readonly _logger: LoggerService,
     ) {
         this.app = express();
@@ -39,6 +41,7 @@ export default class Server {
             http.createServer(this.app).listen(
                 (port),
                 () => {
+                    this._authModule.load();
                     this._logger.info(`Server listening on port ${port}! Open http://localhost:${port} to see the app`);
                     resolve();
                 }
