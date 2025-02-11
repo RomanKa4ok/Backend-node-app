@@ -8,6 +8,7 @@ import { SuccessResponse } from 'src/common/classes/api-controller';
 import MiddlewaresService from 'src/common/services/middlewares.service';
 import { CreateUserSchema } from 'src/plugins/users/schemas';
 import { IdSchema } from 'src/common/schemas';
+import { UpdateOneRequest } from 'src/common/types/api.types';
 
 @injectable()
 export default class UsersController extends EntityController<Users> {
@@ -48,5 +49,11 @@ export default class UsersController extends EntityController<Users> {
         const user = await this.service.createOne(request.body);
 
         return this.toSuccessResponse(user, 'Entity created');
+    }
+
+    protected override async updateOne(request: UpdateOneRequest<Users>): Promise<SuccessResponse<Users>> {
+        const user = await this.service.updateOneBy({ id: request.params.id }, request.body)
+
+        return this.toSuccessResponse(user, 'Entity updated');
     }
 }
