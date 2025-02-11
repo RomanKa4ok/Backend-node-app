@@ -6,6 +6,7 @@ import config from '../../../config';
 import UsersRepository from '../../users/repositories/users.repository';
 import type { AuthUserCache } from '../types';
 import SignInService, { type UserSignedInData } from './sign-in.service';
+import UsersServiceEmitter from 'src/plugins/users/users.emitter';
 
 const { AUTH_SESSION_EXPIRATION_SECONDS } = config;
 
@@ -17,6 +18,7 @@ export default class UserCacheService implements Observer {
         _logger: LoggerService,
         private readonly _cacheService: CacheService,
         private readonly _signIn: SignInService,
+        private readonly _usersServiceEmitter: UsersServiceEmitter,
         private readonly _usersRepository: UsersRepository,
     ) {
         this._logger = _logger.createChild('UserCacheService');
@@ -24,10 +26,25 @@ export default class UserCacheService implements Observer {
 
     public load() {
         this._signIn.on(SignInService.EVENT_USER_SIGNED_IN, this.resetAuthUserCache.bind(this));
+        this._usersServiceEmitter.on(UsersServiceEmitter.USER_DATA_UPDATED, this.updateAuthUserCache.bind(this));
     }
 
     public unload() {
         this._signIn.off(SignInService.EVENT_USER_SIGNED_IN, this.resetAuthUserCache.bind(this));
+        this._usersServiceEmitter.off(UsersServiceEmitter.USER_DATA_UPDATED, this.updateAuthUserCache.bind(this));
+    }
+
+    /**
+     * Update auth user cache
+     */
+    async updateAuthUserCache(userId: string): Promise<void> {
+        const user = await this.getAuthUserCache(userId);
+
+        if (user) {
+            this._logger.info(`Updating authorized user cache with id: ${userId}`);
+
+            await this.resetAuthUserCache({ userId })
+        }
     }
 
     /**
