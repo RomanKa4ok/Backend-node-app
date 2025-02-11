@@ -4,7 +4,7 @@ export class IdSchema {
     @IsString()
     id: string;
 
-    constructor(id: string) {
-        this.id = id;
+    constructor(data: { id: string }) {
+        this.id = data.id;
     }
 }
