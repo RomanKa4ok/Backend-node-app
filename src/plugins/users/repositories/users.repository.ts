@@ -2,7 +2,7 @@ import RepositoryEntity from 'src/common/classes/entity-repository';
 import { Users } from 'src/db';
 import { injectable } from 'tsyringe';
 import { omit } from 'lodash';
-import { AuthorizedUser } from 'src/plugins/auth/types';
+import { AuthorizedUser, AuthUserCache } from 'src/plugins/auth/types';
 import { EntityStatus } from 'src/common/constants';
 
 @injectable()
@@ -16,6 +16,10 @@ export default class UsersRepository extends RepositoryEntity<Users> {
         });
 
         return omit(user, ['password', 'salt', 'emailConfirmedAt'] as (keyof Users)[]) as Users;
+    }
+
+    getUserForCache(id: string): Promise<AuthUserCache> {
+        return this.getRepository().findOne({ where: { id } }) as Promise<AuthUserCache>;
     }
 
     getAuthUser(id: string): Promise<AuthorizedUser> {

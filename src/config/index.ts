@@ -18,6 +18,7 @@ export type Config = {
     MAILGUN_DOMAIN: string;
     MAILGUN_API_KEY: string;
     MAILGUN_EMAIL_FROM: string;
+    AUTH_SESSION_EXPIRATION_SECONDS: number;
 }
 
 const {
@@ -31,7 +32,8 @@ const {
     JWT_SECRET,
     MAILGUN_DOMAIN,
     MAILGUN_API_KEY,
-    MAILGUN_EMAIL_FROM
+    MAILGUN_EMAIL_FROM,
+    AUTH_SESSION_EXPIRATION_SECONDS
 } = process.env; 
 
 const config: Config = {
@@ -45,7 +47,8 @@ const config: Config = {
     JWT_SECRET: JWT_SECRET || '',
     MAILGUN_DOMAIN: MAILGUN_DOMAIN || '',
     MAILGUN_API_KEY: MAILGUN_API_KEY || '',
-    MAILGUN_EMAIL_FROM: MAILGUN_EMAIL_FROM || ''
+    MAILGUN_EMAIL_FROM: MAILGUN_EMAIL_FROM || '',
+    AUTH_SESSION_EXPIRATION_SECONDS: parseInt(AUTH_SESSION_EXPIRATION_SECONDS || '86400')
 }
 
 export default config;

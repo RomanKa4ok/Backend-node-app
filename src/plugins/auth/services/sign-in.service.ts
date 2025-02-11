@@ -1,17 +1,23 @@
 import UsersRepository from 'src/plugins/users/repositories/users.repository';
-import { injectable } from 'tsyringe';
 import LoggerService from 'src/common/services/logger.service';
 import { ApiError, NotFoundError } from 'src/common/classes/errors';
 import PasswordsService from 'src/plugins/users/services/passwords.service';
 import { JwtService } from 'src/common/services/jwt.service';
+import { singleton } from 'tsyringe';
+import { EventEmitter } from 'events';
 
 export type SignInData = {
     email: string;
     password: string;
 }
 
-@injectable()
-export default class SignInService {
+export type UserSignedInData = {
+    userId: string;
+}
+
+@singleton()
+export default class SignInService extends EventEmitter {
+    public static EVENT_USER_SIGNED_IN = 'user_signed_in';
     private readonly _logger: LoggerService;
 
     constructor(
@@ -20,6 +26,7 @@ export default class SignInService {
         private readonly _JWTService: JwtService,
         private readonly _passwordService: PasswordsService,
     ) {
+        super();
         this._logger = logger.createChild('SignImService');
     }
 
@@ -48,7 +55,9 @@ export default class SignInService {
 
         this._logger.info(`Logged in successfully: ${data.email}`);
 
-        const token = this._JWTService.generateToken({ id: user.id }, '30Day')
+        const token = this._JWTService.generateToken({ id: user.id }, '1Day')
+
+        this.emit(SignInService.EVENT_USER_SIGNED_IN, { userId: user.id });
 
         return { token };
     }
