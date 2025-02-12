@@ -2,7 +2,7 @@ import UsersRepository from 'src/plugins/users/repositories/users.repository';
 import LoggerService from 'src/common/services/logger.service';
 import { ApiError, NotFoundError } from 'src/common/classes/errors';
 import PasswordsService from 'src/plugins/users/services/passwords.service';
-import { JwtService } from 'src/common/services/jwt.service';
+import JwtService from 'src/common/services/jwt.service';
 import { singleton } from 'tsyringe';
 import { EventEmitter } from 'events';
 

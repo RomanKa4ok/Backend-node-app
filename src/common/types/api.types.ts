@@ -15,7 +15,7 @@ export type AuthRequest<
     ReqQuery = EmptyObject,
 > = ApiRequest<P, ReqBody, ReqQuery> & { user: AuthorizedUser }
 export type GetOneRequest = ApiRequest<{ id: string}>
-export type GetListPagedRequest = ApiRequest<EmptyObject, EmptyObject, GetListPagedQuery>
+export type GetListPagedRequest = AuthRequest<EmptyObject, EmptyObject, GetListPagedQuery>
 export type CreateOneRequest<T> = ApiRequest<EmptyObject, T>
 export type UpdateOneRequest<T> = ApiRequest<{ id: string }, T>
 export type DeleteOneRequest = ApiRequest<{ id: string }>

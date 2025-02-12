@@ -8,6 +8,7 @@ import { SuccessResponse } from 'src/common/classes/api-controller';
 import { pick } from 'lodash';
 import MiddlewaresService from 'src/common/services/middlewares.service';
 import ArticlesListQuerySchema from 'src/plugins/articles/schemas/articles-list-query.schema';
+import AuthMiddlewares from 'src/plugins/auth/api/auth.middlewares';
 
 @injectable()
 export default class ArticlesApiController extends EntityController<Articles> {
@@ -16,7 +17,8 @@ export default class ArticlesApiController extends EntityController<Articles> {
     constructor(
         service: ArticlesService,
         logger: LoggerService,
-        private readonly _middlewares: MiddlewaresService,
+        private readonly _authMiddlewares: AuthMiddlewares,
+        private readonly _middlewares: MiddlewaresService
     ) {
         super(service, logger);
     }
@@ -28,6 +30,7 @@ export default class ArticlesApiController extends EntityController<Articles> {
         );
         this.get(
             '/',
+            this._authMiddlewares.requireAuth(),
             this._middlewares.validateQuery(ArticlesListQuerySchema),
             this.getListPaged
         );

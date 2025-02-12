@@ -8,7 +8,7 @@ import { TAny } from 'src/common/types';
 const { JWT_SECRET } = config;
 
 @injectable()
-export class JwtService {
+export default class JwtService {
     private readonly _logger: LoggerService;
 
     constructor(logger: LoggerService) {
