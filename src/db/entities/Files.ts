@@ -1,6 +1,16 @@
 import { Column, Entity, OneToOne } from 'typeorm';
 import EntityBase from 'src/common/classes/entity-base';
 import { Users } from 'src/db';
+import { TAny } from 'src/common/types';
+
+export type ImageMetadata = {
+    width: number;
+    height: number;
+}
+
+type FileMeta = ImageMetadata | {
+    [key: string]: TAny;
+}
 
 @Entity(
     'files',
@@ -24,4 +34,7 @@ export default class Articles extends EntityBase {
 
     @OneToOne (() => Users, (users) => users.avatar)
     user: Users;
+
+    @Column('json')
+    meta: FileMeta;
 }

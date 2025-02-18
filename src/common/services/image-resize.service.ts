@@ -8,6 +8,12 @@ export type ResizeImageConfig = {
     height: number;
 }
 
+export type ResizeImageResult = {
+    data: Buffer,
+    info: OutputInfo,
+    config: ResizeImageConfig
+}
+
 type ResizeImageOptions = {
     config: ResizeImageConfig[];
 }
@@ -15,13 +21,19 @@ type ResizeImageOptions = {
 @injectable()
 
 export default class ImageResizeService {
-    processImage(data: Buffer, options: ResizeImageOptions): Promise<{ data: Buffer, info: OutputInfo }[]> {
+    processImage(data: Buffer, options: ResizeImageOptions): Promise<ResizeImageResult[]> {
         return Promise.all(options.config.map((config) => this.resizeImage(data, config)));
     }
 
-    resizeImage(data: Buffer, config: ResizeImageConfig): Promise<{ data: Buffer, info: OutputInfo }> {
-        return sharp(data).resize(config.width, config.height)
+    async resizeImage(data: Buffer, config: ResizeImageConfig): Promise<ResizeImageResult> {
+        const result = await sharp(data).resize(config.width, config.height)
             .webp()
             .toBuffer({ resolveWithObject: true });
+
+        return {
+            data: result.data,
+            info: result.info,
+            config
+        };
     }
 }

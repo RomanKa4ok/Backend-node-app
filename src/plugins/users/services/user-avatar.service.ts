@@ -38,7 +38,8 @@ export default class UserAvatarService {
             path: originalImagePath,
                 entityStatus: EntityStatus.Active,
             type: `image/${originalImage.info.format}`,
-            size: originalImage.info.size
+            size: originalImage.info.size,
+            meta: originalImage.config
         });
 
         await this._usersRepository.updateOneBy({ id: authUserId }, { avatarId: originalFileEntity.id });
@@ -68,6 +69,7 @@ export default class UserAvatarService {
                 type: `image/${image.info.format}`,
                 size: image.info.size,
                 parentId: originalFileEntity.id,
+                meta: image.config
             });
         }));
     }

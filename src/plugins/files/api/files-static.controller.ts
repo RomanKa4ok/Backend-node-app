@@ -23,12 +23,12 @@ export default class FilesStaticController extends ApiController {
             this._middlewares.validateParams(IdSchema),
             this.getFilesStatic.bind(this),
         )
-        
-return super.register();
+
+        return super.register();
     }
 
     protected async getFilesStatic(req: GetStaticTypeRequest, res: Response) {
-        const { file, stream } = await this._filesService.getFileStreamById(req.params.id);
+        const { file, stream } = await this._filesService.getFileStreamById({ id: req.params.id, w: req.query.w });
 
         res.setHeader('Content-Type', file.type);
         res.setHeader('Content-Length', file.size.toString());

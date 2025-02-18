@@ -5,6 +5,11 @@ import { NotFoundError } from 'src/common/classes/errors';
 import LoggerService from 'src/common/services/logger.service';
 import { createReadStream, type ReadStream } from 'fs';
 
+type GetFileStreamByIdParams = {
+    id: string;
+    w?: string;
+}
+
 @injectable()
 export default class FilesStaticService {
     constructor(
@@ -14,8 +19,10 @@ export default class FilesStaticService {
         this._logger = _logger.createChild('FilesStaticService');
     }
 
-    async getFileStreamById(id: string): Promise<{ file: Files, stream: ReadStream }> {
-        const file = await this._filesRepository.findOneBy({ id });
+    async getFileStreamById(params: GetFileStreamByIdParams): Promise<{ file: Files, stream: ReadStream }> {
+        const { id, w } = params;
+        const width = w ? parseInt(w) : null;
+        const file = await this._filesRepository.findImageBySize(id, width);
 
         if (!file) {
             this._logger.error(`No file with id ${id}`);
