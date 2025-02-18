@@ -4,11 +4,22 @@ import { injectable } from 'tsyringe';
 import { omit } from 'lodash';
 import { AuthorizedUser, AuthUserCache } from 'src/plugins/auth/types';
 import { EntityStatus } from 'src/common/constants';
+import { FindOptionsWhere } from 'typeorm/find-options/FindOptionsWhere';
 
 @injectable()
 export default class UsersRepository extends RepositoryEntity<Users> {
     override model = Users;
     override alias = 'users'
+
+    override findOneBy(where: FindOptionsWhere<Users>): Promise<Users | null> {
+        return this.getRepository().findOne({
+            where,
+            relations: {
+                avatar: true
+            },
+
+        });
+    }
 
     override async createOne(data: Partial<Users>): Promise<Users> {
         const user = await super.createOne({

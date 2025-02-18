@@ -1,25 +1,23 @@
+import 'reflect-metadata';
 import type { Express } from 'express';
 import * as express from 'express';
 import * as http from 'node:http';
-import * as bodyParser from 'body-parser';
 import helmet from 'helmet';
-import config from './config';
+import config from '../config';
 import { createPGConnection } from 'src/db';
-import ServerRouter from './router';
-import { injectable } from 'tsyringe';
+import { container, injectable } from 'tsyringe';
 import MongoConnection from 'src/db/mongo';
 import LoggerService from 'src/common/services/logger.service';
 import AuthModule from 'src/plugins/auth/auth.module';
-import RedisConnection from 'src/libs/redis';
+import StaticRouter from 'src/apps/static-router';
 
 @injectable()
-export default class Server {
+export default class StaticServer {
     app: Express;
 
     constructor(
-        private readonly _serverRouter: ServerRouter,
+        private readonly _staticRouter: StaticRouter,
         private readonly _mongoConnection: MongoConnection,
-        private readonly _redisConnection: RedisConnection,
         private readonly _authModule: AuthModule,
         private readonly _logger: LoggerService,
     ) {
@@ -27,16 +25,14 @@ export default class Server {
     }
 
     async register() {
-        const port = config.PORT;
+        const port = config.STATIC_PORT;
 
         this.app.use(helmet())
-        this.app.use(bodyParser.json())
 
-        this.app.use('/api', this._serverRouter.register())
+        this.app.use('/static', this._staticRouter.register())
 
         await Promise.all([
             createPGConnection(),
-            this._redisConnection.createConnection(),
             this._mongoConnection.createMongoConnection()
         ])
 
@@ -52,3 +48,7 @@ export default class Server {
         });
     }
 }
+
+const server = container.resolve(StaticServer);
+
+server.register();

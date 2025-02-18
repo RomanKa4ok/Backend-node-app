@@ -3,19 +3,23 @@ import type { Users } from 'src/db';
 import UsersApiService from 'src/plugins/users/services/users.service';
 import LoggerService from 'src/common/services/logger.service';
 import { injectable } from 'tsyringe';
-import { CreateUserRequest } from 'src/plugins/users/types/api';
+import { CreateUserRequest, UploadAvatarRequest } from 'src/plugins/users/types/api';
 import { SuccessResponse } from 'src/common/classes/api-controller';
 import MiddlewaresService from 'src/common/services/middlewares.service';
 import { CreateUserSchema } from 'src/plugins/users/schemas';
 import { IdSchema } from 'src/common/schemas';
 import { UpdateOneRequest } from 'src/common/types/api.types';
+import UserAvatarService from 'src/plugins/users/services/user-avatar.service';
+import { UploadedFile } from 'express-fileupload';
+import { TAny } from 'src/common/types';
 
 @injectable()
 export default class UsersController extends EntityController<Users> {
     constructor(
         _service: UsersApiService,
         _logger: LoggerService,
-        private readonly _middlewares: MiddlewaresService
+        private readonly _middlewares: MiddlewaresService,
+        private readonly _userAvatarService: UserAvatarService,
     ) {
         super(_service, _logger);
     }
@@ -25,6 +29,10 @@ export default class UsersController extends EntityController<Users> {
             '/:id',
             this._middlewares.validateParams(IdSchema),
             this.getOne
+        );
+        this.get(
+            '/',
+            this.getListPaged
         );
         this.post(
             '/',
@@ -41,8 +49,18 @@ export default class UsersController extends EntityController<Users> {
             this._middlewares.validateParams(IdSchema),
             this.deleteOne
         );
+        this.post(
+            '/:id/avatar',
+            this.uploadAvatar
+        );
 
         return super.register();
+    }
+
+    protected async uploadAvatar(request: UploadAvatarRequest): Promise<SuccessResponse<TAny>> {
+        await this._userAvatarService.uploadAvatar(request.params.id,  request.files?.file as UploadedFile)
+
+        return this.toSuccessResponse({}, 'Avatar uploaded!')
     }
 
     protected override async createOne(request: CreateUserRequest): Promise<SuccessResponse<Users>> {

@@ -1,5 +1,6 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 import EntityBase from 'src/common/classes/entity-base';
+import { Files } from 'src/db';
 
 export enum UserRoles {
     ADMIN = 'admin',
@@ -33,4 +34,11 @@ export default class Users extends EntityBase {
 
     @Column('timestamp', { select: false, name: 'email_confirmed_at' })
     emailConfirmedAt: Date;
+
+    @Column('uuid', { name: 'avatar_id', nullable: true })
+    avatarId: string;
+
+    @OneToOne(() => Files, (files) => files.user)
+    @JoinColumn({ name: 'avatar_id', referencedColumnName: 'id' })
+    avatar: Files;
 }

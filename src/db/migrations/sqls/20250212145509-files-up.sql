@@ -8,7 +8,7 @@ CREATE TABLE files (
     entity_status entity_status not null default 'active',
     created_at timestamp with time zone not null default now(),
     updated_at timestamp with time zone not null default now()
-)
+);
 
 ALTER TABLE users
     ADD COLUMN avatar_id uuid REFERENCES files(id) ON DELETE SET NULL;

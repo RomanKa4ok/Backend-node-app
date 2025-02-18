@@ -1,12 +1,13 @@
 import { pgdb } from 'src/db/typeorm';
 import type { EntityTarget, ObjectLiteral, Repository } from 'typeorm';
 import type { GetListPagedQuery, GetListPagedQueryBuilderQuery, GetListPagedReturn } from 'src/common/types';
+import type { FindOptionsWhere } from 'typeorm/find-options/FindOptionsWhere';
 
 export default abstract class RepositoryBase<Entity extends ObjectLiteral> {
     abstract model: EntityTarget<Entity>;
     abstract alias: string;
 
-    async findOneBy(where: Partial<Entity>): Promise<Entity | null> {
+    async findOneBy(where: FindOptionsWhere<Entity>): Promise<Entity | null> {
         return await this.getRepository().findOneBy(where);
     }
 
