@@ -17,3 +17,8 @@ export enum ErrorStatusCode {
     ApiError = 'API_ERROR',
     NotFound = 'NOT_FOUND',
 }
+
+export enum FileUploadProvider {
+    S3 = 's3',
+    Local = 'local',
+}
