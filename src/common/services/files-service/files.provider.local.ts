@@ -1,12 +1,17 @@
-import { FileUploadProviderBase } from 'src/common/services/file-upload';
-import type { UploadFileOptions, UploadFileResult } from 'src/common/services/file-upload/upload.provider.base';
+import type {
+    GetFileResult,
+    UploadFileOptions,
+    UploadFileResult
+} from 'src/common/services/files-service/files.provider.base';
+import FilesProviderBase from 'src/common/services/files-service/files.provider.base';
 import { mkdir, access, constants, writeFile } from 'fs/promises';
 import type LoggerService from 'src/common/services/logger.service';
 import { join } from 'path';
 import * as process from 'node:process';
 import { generateRandomString } from 'src/common/helpers/string.helper';
+import { createReadStream } from 'fs';
 
-export default class LocalUploadProvider extends FileUploadProviderBase {
+export default class LocalFilesProvider extends FilesProviderBase {
     private readonly _fileFolder: string;
 
     constructor(logger: LoggerService) {
@@ -42,5 +47,9 @@ export default class LocalUploadProvider extends FileUploadProviderBase {
             filePath,
             fullName
         }
+    }
+
+    override async getFile(location: string): Promise<GetFileResult> {
+        return createReadStream(location);
     }
 }

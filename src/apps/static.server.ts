@@ -10,6 +10,7 @@ import MongoConnection from 'src/db/mongo';
 import LoggerService from 'src/common/services/logger.service';
 import AuthModule from 'src/plugins/auth/auth.module';
 import StaticRouter from 'src/apps/static-router';
+import FilesService from 'src/common/services/files-service';
 
 @injectable()
 export default class StaticServer {
@@ -20,6 +21,7 @@ export default class StaticServer {
         private readonly _mongoConnection: MongoConnection,
         private readonly _authModule: AuthModule,
         private readonly _logger: LoggerService,
+        private readonly _filesService: FilesService,
     ) {
         this.app = express();
     }
@@ -35,6 +37,8 @@ export default class StaticServer {
             createPGConnection(),
             this._mongoConnection.createMongoConnection()
         ])
+
+        await this._filesService.init();
 
         return await new Promise<void>((resolve) => {
             http.createServer(this.app).listen(

@@ -13,7 +13,7 @@ import MongoConnection from 'src/db/mongo';
 import LoggerService from 'src/common/services/logger.service';
 import AuthModule from 'src/plugins/auth/auth.module';
 import RedisConnection from 'src/libs/redis';
-import FileUpload from 'src/common/services/file-upload';
+import FilesService from 'src/common/services/files-service';
 
 @injectable()
 export default class ApiServer {
@@ -25,7 +25,7 @@ export default class ApiServer {
         private readonly _redisConnection: RedisConnection,
         private readonly _authModule: AuthModule,
         private readonly _logger: LoggerService,
-        private readonly _fileUpload: FileUpload
+        private readonly _filesService: FilesService
     ) {
         this.app = express();
     }
@@ -45,7 +45,7 @@ export default class ApiServer {
             this._mongoConnection.createMongoConnection()
         ])
 
-        await this._fileUpload.init()
+        await this._filesService.init()
 
         return await new Promise<void>((resolve) => {
             http.createServer(this.app).listen(

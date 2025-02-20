@@ -1,4 +1,5 @@
 import type LoggerService from 'src/common/services/logger.service';
+import type { Readable } from 'stream'
 
 export type UploadFileOptions = {
     format: string;
@@ -11,7 +12,9 @@ export type UploadFileResult = {
     fullName: string;
 }
 
-export default abstract class FileUploadProviderBase {
+export type GetFileResult = Readable
+
+export default abstract class FilesProviderBase {
     protected logger: LoggerService;
 
     protected constructor(logger: LoggerService) {
@@ -20,4 +23,5 @@ export default abstract class FileUploadProviderBase {
 
     abstract init(): Promise<void>;
     abstract uploadFile(file: Buffer, options: UploadFileOptions): Promise<UploadFileResult>;
+    abstract getFile(location: string): Promise<GetFileResult>;
 }

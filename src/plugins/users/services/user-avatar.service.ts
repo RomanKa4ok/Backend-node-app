@@ -4,7 +4,7 @@ import ImageResizeService from 'src/common/services/image-resize.service';
 import { EntityStatus } from 'src/common/constants';
 import FilesRepository from 'src/plugins/files/repositories/files.repository';
 import UsersRepository from 'src/plugins/users/repositories/users.repository';
-import FileUpload from 'src/common/services/file-upload';
+import FilesService from 'src/common/services/files-service';
 
 @injectable()
 export default class UserAvatarService {
@@ -12,7 +12,7 @@ export default class UserAvatarService {
         private readonly _imageResizeService: ImageResizeService,
         private readonly _filesRepository: FilesRepository,
         private readonly _usersRepository: UsersRepository,
-        private readonly _fileUpload: FileUpload
+        private readonly _filesService: FilesService
     ) {
 
     }
@@ -26,7 +26,7 @@ export default class UserAvatarService {
         const {
             fileName: originalFileName,
             filePath: originalImagePath
-        } = await this._fileUpload.uploadFile(file.data, { format: originalImage.info.format });
+        } = await this._filesService.uploadFile(originalImage.data, { format: originalImage.info.format });
 
         const originalFileEntity = await this._filesRepository.createOne({
             name: originalFileName,
@@ -53,7 +53,7 @@ export default class UserAvatarService {
         );
 
         await Promise.all(croppedImage.map(async (image) => {
-            const { fileName, filePath } = await this._fileUpload.uploadFile(
+            const { fileName, filePath } = await this._filesService.uploadFile(
                 file.data,
                 { format: originalImage.info.format }
             );
