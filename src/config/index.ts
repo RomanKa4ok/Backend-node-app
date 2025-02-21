@@ -11,6 +11,7 @@ export type Config = {
     APP_URL: string
     PORT: string;
     STATIC_PORT: string;
+    CRON_PORT: string;
     DATABASE_URL: string;
     NODE_ENV: Environment;
     MONGO_LOGS: boolean;
@@ -32,6 +33,7 @@ const {
     APP_URL,
     PORT,
     STATIC_PORT,
+    CRON_PORT,
     DATABASE_URL,
     NODE_ENV,
     MONGO_DATABASE_URL,
@@ -53,6 +55,7 @@ const config: Config = {
     APP_URL: APP_URL || '',
     PORT: PORT || '3000',
     STATIC_PORT: STATIC_PORT || '3001',
+    CRON_PORT: CRON_PORT || '3002',
     DATABASE_URL: DATABASE_URL || '',
     NODE_ENV: NODE_ENV as Environment || '',
     MONGO_DATABASE_URL: MONGO_DATABASE_URL || '',
